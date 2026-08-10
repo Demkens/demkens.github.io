@@ -55,14 +55,12 @@ jobs:
           mkdir -p "${HOME}/.local"
 
       - name: 安装Go (如果存在go.mod)
-        if: hashFiles('go.mod') != ''
         uses: actions/setup-go@v6
         with:
           go-version: ${{ env.GO_VERSION }}
           cache: false
 
       - name: 安装Node.js (如果存在package-lock.json)
-        if: hashFiles('package-lock.json') != ''
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
