@@ -1,0 +1,9 @@
+baseURL = 'https://demkens.github.io/'
+locale = 'zh-cn'
+title = 'Demkens Blog'
+theme = 'PaperMod'
+
+[params]
+  [params.author]
+    name = "Demkens"
+    email = "youremail@example.com"
