@@ -21,6 +21,7 @@ tags = [
   "chroma",
   "personal"
 ]
+# 功能标签, 对应主题里实际可配置的功能项
 features = [
   "responsive",
   "single-column",
@@ -54,6 +55,7 @@ features = [
   "multiple-authors",
   "post-nav-links"
 ]
+# 最低 Hugo 版本要求
 min_version = "0.146.0"
 
 [author]
