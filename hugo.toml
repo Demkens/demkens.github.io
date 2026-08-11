@@ -1,9 +1,193 @@
+# ===================================================================
+# Hugo 站点主配置（Hugo Site Configuration）
+# 文档：https://gohugo.io/getting-started/configuration/
+# 主题：PaperMod  https://adityatelange.github.io/hugo-PaperMod/
+#
+# 配置项分为三大类：
+#   1) Hugo 内置项（baseURL / title / theme / markup ...）
+#   2) [params] 段：传给主题的参数，决定主题各功能是否开启
+#   3) [[menu.main]]:顶部导航菜单 / [outputs]:搜索功能输出格式 等结构化配置
+# ===================================================================
+
+# baseURL：站点正式访问地址，部署后浏览器的根 URL
 baseURL = 'https://demkens.github.io/'
-locale = 'zh'
+
+# languageCode：Hugo 标准语言码，影响 <html lang> 属性与日期格式
+# locale：PaperMod 主题额外读取的语言标识，与 i18n/ 中的语言文件对应
+# defaultContentLanguage：默认内容语言，决定加载哪套 i18n 文案
+languageCode = 'zh-cn'
+locale = 'zh-cn'
+defaultContentLanguage = 'zh'
+
+# title：站点标题，显示在浏览器标签和首页大标题处
 title = 'Demkens Blog'
+
+# theme：启用的主题名，对应 themes/ 下的目录名
 theme = 'PaperMod'
 
+# enableEmoji：允许在 Markdown 中使用 emoji 短码（如 :smile:）
+enableEmoji = true
+# enableRobotsTXT：自动生成 robots.txt，并指向 sitemap
+enableRobotsTXT = true
+# enableGitInfo：使用 Git 提交时间作为文章"最后更新时间"
+enableGitInfo = true
+# buildDrafts：构建时是否包含 draft:true 的草稿（生产环境应为 false）
+buildDrafts = false
+# summaryLength：自动摘要长度（按字数计）
+summaryLength = 70
+# paginate：列表页每页文章数
+paginate = 10
+
+# ===================================================================
+# 主题参数[params]: 传给 PaperMod，决定首页样式、文章页功能开关、社交图标等
+# ===================================================================
 [params]
+  # 环境标识: env = "production" 时，主题会启用面向生产的资源指纹与压缩
+  env = "production"
+
+  # 站点默认 SEO 信息（会被单篇 front matter 同名字段覆盖）
+  description = "Demkens 的个人博客，记录技术、经验与杂谈"
+  
+  # 主题外观: defaultTheme：默认明暗模式（light / dark / auto）
+  defaultTheme = "auto"   # auto = 跟随访客系统设置
+  disableThemeToggle = false  # true 时隐藏右上角明暗切换按钮
+
+  # 文章页功能开关（也可在单篇 front matter 中覆盖）
+  ShowWordCount         = true    # 显示字数
+  ShowToc               = true    # 显示目录
+  TocOpen               = false   # 目录默认展开
+  ShowBreadCrumbs       = true    # 显示面包屑（首页 / 文章 / xxx）
+  ShowPostNavLinks      = true    # 显示上一篇 / 下一篇
+  ShowCodeCopyButtons   = true    # 代码块右上角显示复制按钮
+  ShowReadingTime       = false   # 显示阅读时长
+  ShowShareButtons      = false   # 文章底部显示分享按钮
+  ShowComments          = false   # 显示评论区（需配合 [params.comments]）
+  disableSpecial1stPost = false   # 首页第一篇是否使用特殊样式
+  hideMeta              = false   # 是否隐藏文章元信息
+  hideSummary           = false   # 是否隐藏自动摘要
+
+  # 作者信息
   [params.author]
     name = "Demkens"
-    email = "youremail@example.com"
+    email = "cache_miss@126.com"
+
+  # 首页信息模式，与 Profile 模式二选一；信息模式最常用，展示头像 + 标题 + 简介 + 社交图标
+  [params.homeInfoParams]
+    Title = "Demkens"
+    Content = "个人博客，记录技术、经验与杂谈"
+    # imageUrl：首页头像，放在 static/images/ 下，URL 以 "/" 开头
+    # imageUrl = "/images/avatar.png"
+    # imageTitle = "Demkens 头像"
+
+  # 社交图标（页脚显示），name 必须对应主题 layouts/_partials/svg.html 中已定义的图标名
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/demkens"
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:cache_miss@126.com"
+
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+  # 封面图参数（可被单篇 front matter 中的 cover 字段覆盖）
+  [params.cover]
+    hidden           = false   # 全局隐藏封面图
+    hiddenInList     = false   # 列表页隐藏封面
+    hiddenInSingle   = false   # 文章页隐藏封面
+    responsiveImages = true    # 生成响应式图片，节省流量
+    linkFullImages   = false   # 点击封面是否打开原图
+
+  # 评论系统（以 Giscus 为例，基于 GitHub Discussions）
+  # 不启用时保持 ShowComments = false 即可，下方配置可留作模板
+  [params.comments]
+    enabled = false
+    provider = "giscus"
+
+  [params.giscus]
+    repo = "demkens/demkens.github.io"
+    repoID = ""                       # TODO：访问 https://giscus.app 生成
+    category = "Announcements"
+    categoryID = ""                   # TODO：访问 https://giscus.app 生成
+    mapping = "pathname"
+    reactionsEnabled = 1
+    inputPosition = "top"
+    theme = "light"
+    lang = "zh-CN"
+
+  # 静态资源相关
+  [params.assets]
+    disableFingerprinting = false   # true 时关闭资源指纹（生产环境不建议关）
+    # favicon：站点图标，放在 static/ 根目录
+    favicon = "<link rel='icon' href='/favicon.ico'>"
+
+# ===================================================================
+# 输出格式（Outputs），启用搜索功能时此项必填
+# 关键点：home 必须输出 JSON，主题才会生成搜索索引（index.json）
+# ===================================================================
+[outputs]
+  home     = ["HTML", "RSS", "JSON"]
+  section  = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+
+# ===================================================================
+# 菜单配置（顶部导航栏）
+# identifier 必须唯一；weight 决定顺序（数值小→靠左）
+# 使用 /archives/ 和 /search/ 需先在 content/ 下创建对应页面文件
+# ===================================================================
+[[menu.main]]
+  identifier = "home"
+  name = "首页"
+  url = "/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "archives"
+  name = "归档"
+  url = "/archives/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
+  weight = 30
+
+[[menu.main]]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 40
+
+# ===================================================================
+# Markdown 渲染配置（Markup）
+# ===================================================================
+[markup]
+  # Goldmark：Hugo 默认 Markdown 引擎
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true   # true：允许在 Markdown 中直接写 HTML（短代码、内嵌脚本等）
+
+    # 数学公式渲染（KaTeX/MathJax 兼容写法）
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block  = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)'], ['$', '$']]
+
+  # 代码高亮
+  [markup.highlight]
+    style        = "github-dark"   # 高亮主题
+    codeFences   = true            # 启用 ``` 代码块语法高亮
+    guessSyntax  = true            # 未指定语言时自动猜测
+    lineNos      = false           # 是否显示行号
+    noClasses    = false           # false 时使用 CSS class（便于切换主题）
+    tabWidth     = 2
+
+  # 目录生成规则
+  [markup.tableOfContents]
+    startLevel = 2     # 从 H2 开始收录（H1 一般是文章标题）
+    endLevel   = 4     # 收录到 H4
+    ordered    = false # 使用无序列表，视觉更柔和
