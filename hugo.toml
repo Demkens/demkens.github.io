@@ -75,9 +75,8 @@ paginate = 10
   [params.homeInfoParams]
     Title = "Demkens"
     Content = "个人博客，记录技术、经验与杂谈"
-    # imageUrl：首页头像，放在 static/images/ 下，URL 以 "/" 开头
-    # imageUrl = "/images/avatar.png"
-    # imageTitle = "Demkens 头像"
+    imageUrl = "/images/avatar.png"   # imageUrl：首页头像，放在 static/images/ 下，URL 以 "/" 开头
+    imageTitle = "Demkens 头像"
 
   # 社交图标（页脚显示），name 必须对应主题 layouts/_partials/svg.html 中已定义的图标名
   [[params.socialIcons]]
