@@ -31,6 +31,8 @@ enableRobotsTXT = true
 enableGitInfo = true
 # buildDrafts：构建时是否包含 draft:true 的草稿（生产环境应为 false）
 buildDrafts = false
+# hasCJKLanguage：启用中日韩语言检测，使 .WordCount / 自动摘要按 CJK 字符正确计数（否则中文按空格分词会少算）
+hasCJKLanguage = true
 # summaryLength：自动摘要长度（按字数计）
 summaryLength = 70
 # paginate：列表页每页文章数
@@ -142,22 +144,28 @@ paginate = 10
   weight = 10
 
 [[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 20
+
+[[menu.main]]
   identifier = "archives"
   name = "归档"
   url = "/archives/"
-  weight = 20
+  weight = 30
 
 [[menu.main]]
   identifier = "search"
   name = "搜索"
   url = "/search/"
-  weight = 30
+  weight = 40
 
 [[menu.main]]
   identifier = "tags"
   name = "标签"
   url = "/tags/"
-  weight = 40
+  weight = 50
 
 # ===================================================================
 # Markdown 渲染配置（Markup）
