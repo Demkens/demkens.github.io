@@ -1,6 +1,8 @@
 +++
-date = '2026-09-05T20:34:54+08:00'
-title = 'Markdown 语法'
+title = 'Markdown 语法规范'
+date = '2026-09-01'
+description = 'Markdown 基础语法和推荐编写风格，顺便用于测试博客网站对于Markdown语法的支持表现。'
+tags = ['语言语法']
 draft = false
 +++
 ## 一、基础语法导论

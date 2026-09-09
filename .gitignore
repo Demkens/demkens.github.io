@@ -6,3 +6,6 @@ public/
 
 # Hugo 构建锁文件
 .hugo_build.lock
+
+#Obsidian 联动使用排除
+content/posts/.obsidian
