@@ -1,0 +1,18 @@
+{{- /*
+  Footer 自定义扩展区（项目级覆盖主题同名空占位文件）
+  仅当本页渲染过 mermaid 代码块（render-codeblock-mermaid.html 写入 Store 标记）时加载库。
+  使用本地 UMD 单文件版（static/libs/mermaid/mermaid.min.js），离线可用，无外部 CDN 请求；
+  加载完成后初始化，主题明暗模式自动适配（localStorage 的 pref-theme 优先，auto 时跟随系统）。
+*/ -}}
+{{- if .Store.Get "hasMermaid" }}
+<script src="{{ "libs/mermaid/mermaid.min.js" | relURL }}"
+        onload="mermaid.initialize({
+          startOnLoad: true,
+          securityLevel: 'loose',
+          theme: (localStorage.getItem('pref-theme') === 'dark' ||
+                  (!localStorage.getItem('pref-theme') &&
+                   window.matchMedia('(prefers-color-scheme: dark)').matches))
+                 ? 'dark' : 'default',
+          fontFamily: 'inherit'
+        });"></script>
+{{- end }}

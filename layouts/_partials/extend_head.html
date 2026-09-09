@@ -1,0 +1,27 @@
+{{- /*
+  <head> 自定义扩展区（项目级覆盖主题同名空占位文件）
+  仅在「文章页且正文确实包含公式」时加载 KaTeX，列表页零开销。
+  KaTeX 负责 LaTeX 公式渲染：hugo.toml 的 passthrough 配置让 Hugo 原样保留公式源码，
+  浏览器端由 auto-render 扫描页面并替换为排版后的公式。
+  资源全部本地化（static/libs/katex/），离线可用，无外部 CDN 请求。
+*/ -}}
+{{- if .IsPage }}
+
+{{- $hasBlockMath := or (strings.Contains .RawContent "$$") (strings.Contains .RawContent `\[`) }}
+{{- $hasInlineMath := or (strings.Contains .RawContent `\(`) (findRE `\$[^$\n]+?\$` .RawContent 1) }}
+{{- if or $hasBlockMath $hasInlineMath }}
+<link rel="stylesheet" href="{{ "libs/katex/katex.min.css" | relURL }}">
+<script defer src="{{ "libs/katex/katex.min.js" | relURL }}"></script>
+<script defer src="{{ "libs/katex/contrib/auto-render.min.js" | relURL }}"
+        onload="renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });"></script>
+{{- end }}
+
+{{- end }}

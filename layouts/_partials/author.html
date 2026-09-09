@@ -1,0 +1,22 @@
+{{- /*
+  作者信息渲染（项目级覆盖主题同名 partial）
+  兼容三种配置形式：
+    1. 字符串：author = "Demkens"
+    2. 列表：  author = ["A", "B"]
+    3. 表：    [params.author] / [author]
+                 name = "Demkens"
+                 email = "..."      ← email 不在列表元信息中显示，仅用于社交/头像
+  主题原模板未处理 map，会直接打印出 map[email:... name:...]。
+*/ -}}
+{{- if or .Params.author site.Params.author }}
+{{- $author := (.Params.author | default site.Params.author) }}
+{{- $author_type := (printf "%T" $author) }}
+
+{{- if (or (eq $author_type "[]string") (eq $author_type "[]interface {}")) }}
+{{- delimit $author ", " }}
+{{- else if reflect.IsMap $author }}
+{{- with $author.name }}{{ . }}{{ end }}
+{{- else }}
+{{- $author }}
+{{- end }}
+{{- end -}}

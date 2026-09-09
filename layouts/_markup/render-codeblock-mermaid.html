@@ -1,0 +1,8 @@
+{{- /*
+  Mermaid 专用代码块 render hook（Hugo 新版路径 layouts/_markup/）
+  ```mermaid 代码块输出为 <pre class="mermaid">，交由 mermaid.js 在前端渲染；
+  并通过 Page Store 标记本页含图表，extend_footer.html 据此按需加载 mermaid 库。
+  其余语言不提供通用 hook，继续走 Hugo 内置 Chroma 高亮（主题复制按钮不受影响）。
+*/ -}}
+<pre class="mermaid">{{ .Inner | htmlEscape | safeHTML }}</pre>
+{{- .Page.Store.Set "hasMermaid" true -}}

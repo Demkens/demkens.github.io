@@ -83,8 +83,10 @@
       </h2>
     </header>
     {{- if (ne (.Param "hideSummary") true) }}
+    {{- /* 摘要优先取 front matter 的 description，其次 summary 参数/<!--more-->，最后自动截取 */}}
+    {{- $summary := .Description | default .Summary }}
     <div class="entry-content">
-      <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+      <p>{{ $summary | plainify | htmlUnescape }}{{ if and .Truncated (not .Description) }}...{{ end }}</p>
     </div>
     {{- end }}
     {{- if not (.Param "hideMeta") }}

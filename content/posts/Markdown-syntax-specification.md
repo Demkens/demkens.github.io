@@ -1,7 +1,7 @@
 +++
 title = 'Markdown 语法规范'
 date = '2026-09-01'
-description = 'Markdown 基础语法和推荐编写风格，顺便用于测试博客网站对于Markdown语法的支持表现。'
+description = 'Markdown 基础语法和推荐编写风格，顺便用于测试博客网站对于各种语法的支持表现。'
 tags = ['语言语法']
 draft = false
 +++
@@ -126,3 +126,45 @@ See the section on [`code`](#code).
 - **代码块与上下文间**：代码块的前后**必须**各空一行，否则代码块可能无法正确闭合，甚至把后面的普通文字染成代码颜色。
 - **引用块与上下文间**：同理，引用块前后的普通段落必须空一行，否则引用的范围会错乱。
 - **表格与上下文间**：表格的上方和下方**必须**空一行，否则表格无法正确渲染。
+
+## 三、扩展语法测试
+
+本节用于验证博客对 LaTeX 公式与 Mermaid 图表的支持。
+
+### 1. LaTeX 公式
+
+行内公式：质能方程 $E = mc^2$，以及勾股定理 \(a^2 + b^2 = c^2\)。
+
+块级公式：
+
+$$
+\int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
+$$
+
+\[
+i\hbar \frac{\partial}{\partial t} \Psi(\mathbf{r}, t) = \hat{H} \Psi(\mathbf{r}, t)
+\]
+
+### 2. Mermaid 图表
+
+流程图：
+
+```mermaid
+graph LR
+    A[Markdown 源码] --> B[Hugo 构建]
+    B --> C[静态 HTML]
+    C --> D[浏览器渲染]
+```
+
+时序图：
+
+```mermaid
+sequenceDiagram
+    participant 读者
+    participant 浏览器
+    participant Pages as GitHub Pages
+    读者->>浏览器: 访问博客
+    浏览器->>Pages: 请求页面
+    Pages-->>浏览器: 返回静态文件
+    浏览器-->>读者: 渲染文章
+```

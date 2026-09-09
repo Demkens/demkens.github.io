@@ -159,3 +159,102 @@
         display: none;
     }
 }
+
+/* === Obsidian 阅读视图风格：文章正文排版增强 === */
+
+/* 正文行距与字号，接近 Obsidian 阅读视图 */
+.post-content {
+    font-size: 16.5px;
+    line-height: 1.8;
+}
+
+/* 引用块：加粗左条 + 浅色底 + 圆角（Obsidian callout 风格基础款） */
+.md-content blockquote {
+    margin: 1.2em 0;
+    padding: 0.7em 1.1em;
+    border-inline-start: 4px solid var(--tertiary);
+    background: var(--code-bg);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--secondary);
+}
+
+.md-content blockquote p {
+    margin-block: 0;
+}
+
+.md-content blockquote p + p {
+    margin-top: 0.6em;
+}
+
+/* 嵌套引用保持层级感 */
+.md-content blockquote blockquote {
+    margin: 0.6em 0;
+    background: var(--entry);
+}
+
+/* 表格：圆角包裹 + 表头底色 + 斑马纹 */
+.md-content table {
+    border-collapse: collapse;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--border);
+    display: table;
+}
+
+.md-content table th,
+.md-content table:not(.highlighttable, .highlight table, .gist .highlight) td {
+    border: 1px solid var(--border);
+}
+
+.md-content table th {
+    background: var(--code-bg);
+    font-weight: 600;
+}
+
+.md-content tbody tr:nth-child(even) td {
+    background: var(--code-bg);
+}
+
+.md-content tbody tr:hover td {
+    background: var(--entry);
+}
+
+/* 行内代码：更圆润 */
+.post-content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    font-size: 0.85em;
+}
+
+/* 代码块与正文间距 */
+.md-content .highlight:not(table) {
+    border: 1px solid var(--border);
+}
+
+/* Mermaid 图表容器：卡片式、居中 */
+.md-content pre.mermaid {
+    display: flex;
+    justify-content: center;
+    margin: 1.2em 0;
+    padding: 1em;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+}
+
+.md-content pre.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 分隔线：更纤细 */
+.md-content hr {
+    height: 1px;
+    opacity: 0.6;
+}
+
+/* 图片：默认居中显示 */
+.md-content img:not([src*="#left"]):not([src*="#right"]) {
+    margin-inline: auto;
+}
