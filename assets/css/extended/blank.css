@@ -259,103 +259,215 @@
     margin-inline: auto;
 }
 
-/* === 桌面端：文章目录（TOC）左侧固定侧栏 ===
-   仅 ≥1100px 生效；窄屏保持主题原样（正文上方可折叠卡片）。
-   纯 CSS Grid：.toc 作为 .post-single 的直接子元素，置于左列跨全高并 sticky。 */
-@media (min-width: 1100px) {
-    /* 加宽文章页主容器，为左栏腾出空间（列表页 body 含 .list 类，不受影响） */
-    body:not(.list) .main {
-        max-width: calc(var(--main-width) + var(--gap) * 2 + 260px);
-    }
+/* === 文章目录（TOC）布局 ===================================================
+   三档响应式（由 extend_footer.html 中的脚本配合状态类）：
+   · 宽屏 ≥1290px：文章栏宽度与位置完全不变（居中 720px），TOC 以对称网格放进
+     左侧留白区并 sticky 跟随；点收起按钮可隐藏，只剩左缘标签。
+   · 中屏 768–1289px（如半边屏幕）：正文上方不再出现目录卡片，TOC 收缩为左缘
+     竖排小标签；点击标签以浮层面板展开，点遮罩/Esc/收起按钮关闭。
+   · 窄屏 <768px：保持主题原生折叠卡片，不做任何改动。
+   ========================================================================== */
 
-    .post-single {
-        display: grid;
-        grid-template-columns: 230px minmax(0, 1fr);
-        column-gap: 36px;
-    }
-
-    .post-single > details.toc {
-        grid-column: 1;
-        grid-row: 1 / -1;
-        align-self: start;
-        position: sticky;
-        top: calc(var(--header-height) + 16px);
-        max-height: calc(100vh - var(--header-height) - 32px);
-        overflow-y: auto;
-        margin: 0;
-        background: none;
-        border: none;
-        border-radius: 0;
-    }
-
-    .post-single > :not(details.toc) {
-        grid-column: 2;
-        min-width: 0;
-    }
-
-    /* 主题 .post-header 用了 margin-inline:auto，在 Grid item 上会吸收自由空间
-       导致标题相对正文偏移，重置为 0 使其占满内容列 */
-    .post-single > .post-header {
-        margin-inline: 0;
-    }
-
-    /* 侧栏内 TOC 常驻展开，隐藏折叠开关，显示固定标题 */
-    .post-single > details.toc > summary {
-        display: none;
-    }
-
-    .post-single > details.toc::before {
-        content: "目录";
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
+/* ---- 通用：左缘标签、侧栏头部按钮、目录排版（≥768） ---- */
+@media (min-width: 768px) {
+    .toc-tab {
+        position: fixed;
+        left: 0;
+        top: 42%;
+        transform: translateY(-50%);
+        z-index: 95;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 7px;
+        background: var(--entry);
+        border: 1px solid var(--border);
+        border-left: none;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.08);
         color: var(--secondary);
-        letter-spacing: 0.05em;
+        cursor: pointer;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        line-height: 1;
+    }
+
+    .toc-tab:hover {
+        color: var(--primary);
+    }
+
+    .toc-tab svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .toc-tab-label {
+        writing-mode: vertical-rl;
+    }
+
+    .toc-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .toc-side-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: 10px;
     }
 
-    .post-single > details.toc::details-content {
+    .toc-side-head .toc-title {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: var(--secondary);
+    }
+
+    .toc-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border: none;
+        border-radius: 6px;
+        background: none;
+        color: var(--secondary);
+        cursor: pointer;
+    }
+
+    .toc-btn:hover {
+        background: var(--code-bg);
+        color: var(--primary);
+    }
+
+    .toc-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* 目录链接排版：扁平缩进、次级文字色、当前章节高亮条 */
+    details.toc .inner ul {
+        list-style: none;
+        padding-inline-start: 0;
+        margin: 0;
+    }
+
+    details.toc .inner li ul {
+        padding-inline-start: 14px;
+    }
+
+    details.toc .inner a {
+        display: block;
+        padding: 5px 12px;
+        color: var(--secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        border-inline-start: 2px solid var(--border);
+        text-decoration: none !important;
+        transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    details.toc .inner a:hover {
+        color: var(--primary);
+        border-inline-start-color: var(--tertiary);
+    }
+
+    details.toc .inner a.active {
+        color: var(--primary);
+        font-weight: 600;
+        border-inline-start-color: var(--primary);
+    }
+
+    /* 侧栏/浮层中的 TOC：常驻展开、隐藏原生折叠头、去除主题卡片底色 */
+    details.toc.toc-side > summary {
+        display: none;
+    }
+
+    details.toc.toc-side::details-content {
         height: auto;
         opacity: 1;
         overflow: visible;
         content-visibility: visible;
     }
 
-    .post-single details.toc .inner {
+    details.toc.toc-side .inner {
         margin: 0;
         padding: 0;
     }
 
-    /* 侧栏目录排版：扁平缩进、次级文字色、当前章节高亮条 */
-    .post-single details.toc .inner ul {
-        list-style: none;
-        padding-inline-start: 0;
+    details.toc.toc-side {
+        background: none;
+        border: none;
+        border-radius: 0;
         margin: 0;
     }
+}
 
-    .post-single details.toc .inner li ul {
-        padding-inline-start: 14px;
+/* ---- 宽屏：TOC 以 fixed 常态固定在正文左侧的屏幕留白区，不可收起 ----
+   文章容器宽度/位置完全不变（原生 720px 居中），容器内无空列。 */
+@media (min-width: 1290px) {
+    details.toc.toc-side {
+        position: fixed;
+        top: calc(var(--header-height) + 16px);
+        /* 正文内容左缘 = 50% - 360px；TOC 宽 240px，与正文间隔 24px */
+        left: calc(50% - 624px);
+        width: 240px;
+        max-height: calc(100vh - var(--header-height) - 40px);
+        overflow-y: auto;
+        z-index: 80;
+        /* 任何状态下都不做位移 */
+        transform: none;
+        pointer-events: auto;
     }
 
-    .post-single details.toc .inner a {
-        display: block;
-        padding: 4px 10px;
-        color: var(--secondary);
-        font-size: 13.5px;
-        line-height: 1.5;
-        border-inline-start: 2px solid var(--border);
-        text-decoration: none !important;
-        transition: color 0.15s ease, border-color 0.15s ease;
+    /* 宽屏下不提供收起入口：隐藏左缘标签与面板内收起按钮，目录常驻 */
+    .toc-tab {
+        display: none !important;
     }
 
-    .post-single details.toc .inner a:hover {
-        color: var(--primary);
-        border-inline-start-color: var(--tertiary);
-    }
-
-    .post-single details.toc .inner a.active {
-        color: var(--primary);
-        font-weight: 600;
-        border-inline-start-color: var(--primary);
+    .toc-collapse {
+        display: none !important;
     }
 }
+
+/* ---- 中屏：TOC 不占正文空间，收缩为左缘标签，点击出浮层面板 ---- */
+@media (min-width: 768px) and (max-width: 1289px) {
+    /* 正文流中的目录卡片移除，避免占用文章顶部空间 */
+    .post-single > details.toc {
+        display: none;
+    }
+
+    body.toc-overlay-open .post-single > details.toc {
+        display: block;
+        position: fixed;
+        left: 14px;
+        top: calc(var(--header-height) + 14px);
+        width: 272px;
+        max-height: calc(100vh - var(--header-height) - 40px);
+        overflow-y: auto;
+        padding: 14px 16px;
+        background: var(--theme);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+        z-index: 100;
+    }
+
+    body.toc-overlay-open .toc-backdrop {
+        display: block;
+    }
+
+    body.toc-overlay-open .toc-tab {
+        display: none;
+    }
+
+    .toc-backdrop {
+        display: none;
+    }
+}
+
