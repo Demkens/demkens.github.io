@@ -10,6 +10,10 @@ placeholder: "输入关键词后回车..."
 weight: 30
 # 这个页面不需要显示在归档列表里
 draft: false
+# 搜索结果页是纯交互页面，无索引价值：禁止搜索引擎收录，也不提交到 sitemap
+robotsNoIndex: true
+sitemap:
+  disable: true
 ---
 
 <!-- 
